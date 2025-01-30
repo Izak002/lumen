@@ -52,8 +52,19 @@ fi
 
 # Run the Ruby script with clean output
 echo -e "\n${GREEN}Starting Lumen...${NC}"
-echo -e "${YELLOW}✨ May the light guide you! ✨${NC}\n"
+echo -e "${YELLOW}✨ May the light guide you! ✨${NC}"
 
-bundle exec ruby lumen.rb
+echo -e "\n${YELLOW}=================================================${NC}"
+echo -e "${GREEN}>>>>>>>> LUMEN OUTPUT STARTING BELOW <<<<<<<<${NC}"
+echo -e "${YELLOW}=================================================${NC}\n"
+
+bundle exec ruby lumen.rb || {
+  echo -e "\n${RED}⚠️  Lumen execution failed ⚠️${NC}"
+  exit 3
+}
+
+echo -e "\n${YELLOW}=================================================${NC}"
+echo -e "${GREEN}<<<<<<<< LUMEN OUTPUT COMPLETED FINSH >>>>>>>>${NC}"
+echo -e "${YELLOW}=================================================${NC}\n"
 
 exit 0
