@@ -1,1 +1,1 @@
-puts "Hello world"
+require_relative 'lib/utils/scriptorium'
