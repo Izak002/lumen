@@ -52,8 +52,49 @@ class Scriptorium
 
   # class methods ------------------------------------------------------
 
+  # Logging methods ----------------------------------------------------
+  def debug(message)
+    log(:debug, "DEBUG", message, COLOURS[:gray]) if should_log?(:debug)
+  end
+
+  def info(message)
+    log(:info, "INFO", message, COLOURS[:blue]) if should_log?(:info)
+  end
+
+  def success(message)
+    log(:success, "SUCCESS", message, COLOURS[:green]) if should_log?(:success)
+  end
+
+  def warning(message)
+    log(:warning, "WARNING", message, COLOURS[:yellow]) if should_log?(:warning)
+  end
+
+  def error(message)
+    log(:error, "ERROR", message, COLOURS[:red]) if should_log?(:error)
+  end
+
+  def api_call(message)
+    log(:api, "API", message, COLOURS[:bright_aqua]) if should_log?(:info)
+  end
+
+  # -----------------------------------------------------------------------
 
   private
+
+  def should_log?(level)
+    LOG_LEVELS[level] >= LOG_LEVELS[@log_level]
+  end
+
+  def log(level, label, message, color)
+    timestamp = Time.now.strftime("%Y-%m-%d %H:%M")
+    entry = "#{timestamp} #{EMOJIS[level]} [#{label}] #{message}"
+    # Console output
+    puts "#{color}#{entry}#{COLOURS[:reset]}"
+    # File output
+    File.open(@log_file, "a") do |log_file|
+      log_file.puts(entry)
+    end
+  end
 
   def initialize_log_file
     # Create empty file if it doesn't exist
