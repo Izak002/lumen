@@ -1,20 +1,23 @@
-require 'logger'
-
 class Scriptorium
-  COLORS = {
-    debug: "\e[36m",   # Aqua
-    info: "\e[32m",    # Green
-    warn: "\e[33m",    # Yellow
-    error: "\e[31m",   # Red
-    fatal: "\e[35m",   # Purple
-    reset: "\e[0m"     # Reset color
+
+  COLOURS = {
+    reset:       "\e[0m",
+    red:         "\e[31m",
+    green:       "\e[32m",
+    yellow:      "\e[33m",
+    blue:        "\e[34m",
+    purple:      "\e[35m",
+    bright_aqua: "\e[96m"
   }.freeze
 
+  # Add API emoji
   EMOJIS = {
-    debug: "🐛",
-    info: "ℹ️",
-    warn: "⚠️",
-    error: "❌",
-    fatal: "💀"
+    info:     "ℹ️ ",
+    success:  "✅",
+    warning:  "⚠️ ",
+    error:    "❌",
+    debug:    "🐞",
+    api:      "🌐"
   }.freeze
+
 end
