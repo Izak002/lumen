@@ -1,3 +1,11 @@
+# dependencies -------------------------------------------------------------
+
+require 'fileutils'
+require 'date'
+
+# --------------------------------------------------------------------------
+
+
 class Scriptorium
 
   COLOURS = {
@@ -27,11 +35,39 @@ class Scriptorium
     error: 4
   }.freeze
 
-  # testing log levels for myself
-  def should_log?(message_level)
-     if LOG_LEVELS[message_level] >= LOG_LEVELS[:warning]
-      puts "yes"
-     end
+  def initialize(
+    log_file: "log/development.log",
+    log_level: :debug
+  )
+    @log_file = log_file
+    @log_level = log_level
+    @start_time = Time.now.strftime('%Y-%m-%d %H:%M')
+
+    # creates log directory if it doesnt exist already
+    FileUtils.mkdir_p(File.dirname(log_file))
+    # creates the file if it doesnt eist
+    initialize_log_file
+    write_header
   end
+
+  # class methods ------------------------------------------------------
+
+
+  private
+
+  def initialize_log_file
+    # Create empty file if it doesn't exist
+    FileUtils.touch(@log_file) unless File.exist?(@log_file)
+  end
+
+  def write_header
+    # check if the file is empty
+    return unless File.zero?(@log_file)
+    File.write(@log_file, "# Scriptorium Log - Started #{@start_time}\n", mode: 'w')
+  end
+
+  # --------------------------------------------------------------------
+
+
 
 end
