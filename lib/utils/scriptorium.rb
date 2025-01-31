@@ -10,7 +10,6 @@ class Scriptorium
     bright_aqua: "\e[96m"
   }.freeze
 
-  # Add API emoji
   EMOJIS = {
     info:     "ℹ️ ",
     success:  "✅",
@@ -19,5 +18,20 @@ class Scriptorium
     debug:    "🐞",
     api:      "🌐"
   }.freeze
+
+  LOG_LEVELS = {
+    debug: 0,
+    info: 1,
+    success: 2,
+    warning: 3,
+    error: 4
+  }.freeze
+
+  # testing log levels for myself
+  def should_log?(message_level)
+     if LOG_LEVELS[message_level] >= LOG_LEVELS[:warning]
+      puts "yes"
+     end
+  end
 
 end
