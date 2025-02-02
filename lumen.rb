@@ -1,12 +1,17 @@
+# dependencies -------------------------------------------------------------
+
 require_relative "lib/utils/scriptorium"
+require_relative "lib/weather"
+
+#  -------------------------------------------------------------------------
 
 logger = Scriptorium.new
 
-# testing log methods
-logger.debug("Initializing weather module")
-logger.api_call("Fetching from weatherAPI.com")
-logger.info("Hello world ........")
-logger.success("Weather data retrieved!")
-logger.warning("High UV index detected")
-logger.error("Failed to connect to joke API")
-logger.show_stats
+#  TODO
+#  => get weather info
+#  => add current date
+
+logger.info("Getting weather information.....")
+weather = Weather.new()
+weather.fetch("Cape Town")
+weather.display
