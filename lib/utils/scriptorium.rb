@@ -35,10 +35,10 @@ class Scriptorium
     error: 4
   }.freeze
 
-  def initialize(
-    log_file: "log/development.log",
-    log_level: :debug
-  )
+  # Allows reading stats from outside the class and creates a getter method
+  attr_reader :stats
+
+  def initialize(log_file: "log/development.log", log_level: :debug)
     @log_file = log_file
     @log_level = log_level
     @start_time = Time.now.strftime('%Y-%m-%d %H:%M')
@@ -48,6 +48,19 @@ class Scriptorium
     # creates the file if it doesnt eist
     initialize_log_file
     write_header
+
+    # Initialize statistics
+    @stats = {
+      total: 0,
+      debug: 0,
+      info: 0,
+      success: 0,
+      warning: 0,
+      error: 0,
+      api: 0,
+      start_time: Time.now
+    }
+
   end
 
   # class methods ------------------------------------------------------
@@ -77,6 +90,22 @@ class Scriptorium
     log(:api, "API", message, COLOURS[:bright_aqua]) if should_log?(:info)
   end
 
+  def show_stats
+    current_time = Time.now
+    running_time = current_time - @stats[:start_time]
+
+    puts "\n#{COLOURS[:purple]}=== LOG STATISTICS ==="
+    puts "Running for: #{running_time.round(2)} seconds"
+    puts "Total logs: #{@stats[:total]}"
+    puts "Debug:   #{@stats[:debug]}"
+    puts "Info:    #{@stats[:info]}"
+    puts "API:     #{@stats[:api]}"
+    puts "Success: #{@stats[:success]}"
+    puts "Warnings: #{@stats[:warning]}"
+    puts "Errors:  #{@stats[:error]}"
+    puts "=======================#{COLOURS[:reset]}"
+  end
+
   # -----------------------------------------------------------------------
 
   private
@@ -86,8 +115,15 @@ class Scriptorium
   end
 
   def log(level, label, message, color)
+    # Update statistics
+    @stats[level] += 1
+    @stats[:total] += 1
+
+    # log output
     timestamp = Time.now.strftime("%Y-%m-%d %H:%M")
-    entry = "#{timestamp} #{EMOJIS[level]} [#{label}] #{message}"
+    caller_info = caller_locations(2,1).first.to_s.split(':')[0..1].join(':')
+    entry = "#{timestamp} #{EMOJIS[level]} [#{label}] #{message} (#{caller_info})"
+
     # Console output
     puts "#{color}#{entry}#{COLOURS[:reset]}"
     # File output

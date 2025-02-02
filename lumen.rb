@@ -9,3 +9,4 @@ logger.info("Hello world ........")
 logger.success("Weather data retrieved!")
 logger.warning("High UV index detected")
 logger.error("Failed to connect to joke API")
+logger.show_stats

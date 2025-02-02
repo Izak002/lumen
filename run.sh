@@ -45,7 +45,7 @@ fi
 # Install gem dependencies if needed
 if ! bundle check &> /dev/null; then
   echo -e "${YELLOW}Installing dependencies...${NC}"
-  export BUNDLE_PATH="vendor/bundle" # makes sure it installs in vendor/bundle :)
+  # export BUNDLE_PATH="vendor/bundle" # makes sure it installs in vendor/bundle :)
   bundle install
 else
   echo -e "${GREEN}All dependencies are up to date ✓${NC}"
