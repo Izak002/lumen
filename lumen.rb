@@ -14,5 +14,5 @@ require_relative "lib/github_stats"
 # weather.display
 
 # logger.info("Gettig github stats information....")
-# github_stats = GithubStats.new
-# github_stats.display_stats
+github_stats = GithubStats.new
+github_stats.display_stats
