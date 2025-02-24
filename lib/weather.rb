@@ -70,6 +70,46 @@ class Weather
     puts table
   end
 
+  def update_readme()
+    readme_path = "README.md"
+    start_marker = "<!-- WEATHER START -->"
+    end_marker = "<!-- WEATHER END -->"
+  
+    return unless @weather_data
+  
+    table_text = <<~WEATHER
+      ```
+      #{Terminal::Table.new do |t|
+          t.title = "#{@weather_data[:location]}"
+          t.style = { all_separators: true, border: :unicode }
+          t << [{ value: "Current Weather", colspan: 2, alignment: :center }]
+  
+          t << ["Temperature:", "#{@weather_data[:temp]}°C"]
+          t << ["Feels Like:", "#{@weather_data[:feels_like]}°C"]
+          t << ["Condition:", @weather_data[:condition]]
+          t << ["Description:", @weather_data[:description]]
+          t << ["Humidity:", "#{@weather_data[:humidity]}%"]
+          t << ["Wind Speed:", "#{@weather_data[:wind_speed]} m/s"]
+          t << ["Visibility:", "#{@weather_data[:visibility]} km"]
+          t << ["Sunrise:", @weather_data[:sunrise]]
+          t << ["Sunset:", @weather_data[:sunset]]
+        end}
+      ```
+    WEATHER
+  
+    content = File.read(readme_path)
+    
+    if content.include?(start_marker) && content.include?(end_marker)
+      new_content = content.gsub(/#{start_marker}.*?#{end_marker}/m, "#{start_marker}\n#{table_text}\n#{end_marker}")
+    else
+      new_content = "#{content}\n\n#{start_marker}\n#{table_text}\n#{end_marker}"
+    end
+  
+    File.write(readme_path, new_content)
+  end
+  
+  
+
   # ---------------------------------------------------------------
 
   private
@@ -87,13 +127,6 @@ class Weather
       sunset: Time.at(response["sys"]["sunset"]).strftime("%H:%M"),
       visibility: response["visibility"] / 1000.0
     }
-  end
-
-  def write_to_readme(text)
-    readme_path = 'README.md'
-
-    # Write back to file
-    File.write(readme_path, text)
   end
 
   def apply_colour(str, colour)

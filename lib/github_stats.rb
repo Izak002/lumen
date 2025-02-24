@@ -37,6 +37,41 @@ class GithubStats
     generate_midi_song(stats)
   end
 
+  def update_readme
+    readme_path = "README.md"
+    start_marker = "<!-- GITHUB_STATS_START -->"
+    end_marker = "<!-- GITHUB_STATS_END -->"
+  
+    stats = fetch_stats
+    return unless stats
+  
+    table_text = <<~GITHUB_STATS
+      ```
+      #{Terminal::Table.new do |t|
+          t.title = "#{stats[:username]}'s GitHub Stats"
+          t.style = { all_separators: true, border: :unicode }
+          t << ["Favourite Language", stats[:primary_language]]
+          t << ["Public Repos", stats[:repos]]
+          t << ["Total Commits", stats[:commits]]
+          t << ["Pull Requests", stats[:prs]]
+          t << ["Issues Closed", stats[:issues]]
+          t << ["Last Commit", stats[:last_commit]]
+        end}
+      ```
+    GITHUB_STATS
+  
+    content = File.read(readme_path)
+  
+    if content.include?(start_marker) && content.include?(end_marker)
+      new_content = content.gsub(/#{start_marker}.*?#{end_marker}/m, "#{start_marker}\n#{table_text}\n#{end_marker}")
+    else
+      new_content = "#{content}\n\n#{start_marker}\n#{table_text}\n#{end_marker}"
+    end
+  
+    File.write(readme_path, new_content)
+  end
+  
+
   private
 
   def fetch_stats
