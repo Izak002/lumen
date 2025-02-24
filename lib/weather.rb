@@ -70,8 +70,8 @@ class Weather
     puts table
   end
 
-  def update_readme()
-    readme_path = "README.md"
+  def update_readme
+    readme_path = File.join(CLONE_DIR, "README.md")
     start_marker = "<!-- WEATHER START -->"
     end_marker = "<!-- WEATHER END -->"
   

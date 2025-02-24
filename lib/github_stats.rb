@@ -38,7 +38,7 @@ class GithubStats
   end
 
   def update_readme
-    readme_path = "README.md"
+    readme_path = File.join(CLONE_DIR, "README.md")
     start_marker = "<!-- GITHUB_STATS_START -->"
     end_marker = "<!-- GITHUB_STATS_END -->"
   
