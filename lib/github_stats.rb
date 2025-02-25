@@ -3,7 +3,6 @@
 require "octokit"
 require "dotenv"
 require "midilib"
-require "terminal-table"
 require "date"
 Dotenv.load
 
@@ -14,60 +13,41 @@ class GithubStats
   ACCESS_TOKEN = ENV["GITHUB_API"]
   raise "Please set the GITHUB_ACCESS token environment variable." unless ACCESS_TOKEN
 
-  COLOURS = {
-    cyan: "\e[36m",
-    green: "\e[32m",
-    blue: "\e[34m",
-    yellow: "\e[33m",
-    magenta: "\e[35m",
-    red: "\e[31m",
-    light_blue: "\e[94m",
-    reset: "\e[0m"
-  }.freeze
-
   def initialize
     @client = Octokit::Client.new(access_token: ACCESS_TOKEN)
     @client.auto_paginate = true
     @user = @client.user
   end
 
-  def display_stats
-    stats = fetch_stats
-    display_table(stats)
-    generate_midi_song(stats)
-  end
-
   def update_readme
-    readme_path = File.join(CLONE_DIR, "README.md")
+    readme_path = "README.md"
     start_marker = "<!-- GITHUB_STATS_START -->"
     end_marker = "<!-- GITHUB_STATS_END -->"
-  
+    
     stats = fetch_stats
     return unless stats
-  
+    
     table_text = <<~GITHUB_STATS
-      ```
-      #{Terminal::Table.new do |t|
-          t.title = "#{stats[:username]}'s GitHub Stats"
-          t.style = { all_separators: true, border: :unicode }
-          t << ["Favourite Language", stats[:primary_language]]
-          t << ["Public Repos", stats[:repos]]
-          t << ["Total Commits", stats[:commits]]
-          t << ["Pull Requests", stats[:prs]]
-          t << ["Issues Closed", stats[:issues]]
-          t << ["Last Commit", stats[:last_commit]]
-        end}
-      ```
+      ## 🚀 #{@user.login}'s GitHub Stats
+      
+      | 📌 Metric           | 📊 Value |
+      |----------------|------------|
+      | 💻 Favourite Language | #{stats[:primary_language]} |
+      | 📂 Public Repos  | #{stats[:repos]} |
+      | 🔥 Total Commits | #{stats[:commits]} |
+      | 🔁 Pull Requests | #{stats[:prs]} |
+      | 🛠️ Issues Closed | #{stats[:issues]} |
+      | ⏳ Last Commit    | #{stats[:last_commit]} |
     GITHUB_STATS
-  
+    
     content = File.read(readme_path)
-  
+    
     if content.include?(start_marker) && content.include?(end_marker)
       new_content = content.gsub(/#{start_marker}.*?#{end_marker}/m, "#{start_marker}\n#{table_text}\n#{end_marker}")
     else
       new_content = "#{content}\n\n#{start_marker}\n#{table_text}\n#{end_marker}"
     end
-  
+    
     File.write(readme_path, new_content)
   end
   
@@ -119,32 +99,6 @@ class GithubStats
     push_events = events.select { |value| value.type == "PushEvent" }
     latest_event = push_events.max_by { |value| value.created_at }
     latest_event&.created_at&.strftime("%Y-%m-%d") || "Never"
-  end
-
-
-  def display_table(stats)
-    table = Terminal::Table.new do |t|
-      t.title = apply_colour("#{stats[:username]}'s GitHub Stats", :cyan)
-      t << [ apply_colour("Favourite Language", :green), stats[:primary_language] ]
-      t << :separator
-      t << [ apply_colour("Public Repos", :blue), stats[:repos] ]
-      t << :separator
-      t << [ apply_colour("Total Commits", :yellow), stats[:commits] ]
-      t << :separator
-      t << [ apply_colour("Pull Requests", :magenta), stats[:prs] ]
-      t << :separator
-      t << [ apply_colour("Issues Closed", :red), stats[:issues] ]
-      t << :separator
-      t << [ apply_colour("Last Commit", :light_blue), stats[:last_commit] ]
-    end
-
-    puts table
-  end
-
-
-  def apply_colour(str, colour)
-    return str unless COLOURS[colour]
-    "#{COLOURS[colour]}#{str}#{COLOURS[:reset]}"
   end
 
   def generate_midi_song(stats)

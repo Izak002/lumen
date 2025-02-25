@@ -63,13 +63,8 @@ GEM
       addressable (>= 2.3.5)
       faraday (>= 0.17.3, < 3)
     securerandom (0.4.1)
-    terminal-table (4.0.0)
-      unicode-display_width (>= 1.1.1, < 4)
     tzinfo (2.0.6)
       concurrent-ruby (~> 1.0)
-    unicode-display_width (3.1.4)
-      unicode-emoji (~> 4.0, >= 4.0.4)
-    unicode-emoji (4.0.4)
     uri (1.0.2)
 
 PLATFORMS
@@ -84,7 +79,6 @@ DEPENDENCIES
   midilib (~> 4.0, >= 4.0.2)
   octokit (~> 9.2)
   ostruct
-  terminal-table (~> 4.0)
 
 BUNDLED WITH
    2.6.3
