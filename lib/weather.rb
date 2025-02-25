@@ -32,17 +32,19 @@ class Weather
   end
 
   def update_readme
-    readme_path = "README.md"
+    readme_path = File.join(CLONE_DIR, "README.md")
     start_marker = "<!-- WEATHER START -->"
     end_marker = "<!-- WEATHER END -->"
     
     return unless @weather_data
 
     condition_emoji = weather_emoji(@weather_data[:condition])
+    current_date = Time.now.strftime("%B %d, %Y at %I:%M %p")
 
     table_text = <<~WEATHER
       ## #{condition_emoji} Weather Update #{condition_emoji}
-      # Updated at 12 for this date 12/5/2025
+      > **Collected by Lumen 🌗:** #{current_date}
+
       🌍 **Location:** #{@weather_data[:location]}
       
       | #{condition_emoji} Temperature | Feels Like | #{condition_emoji} Condition | 💨 Wind Speed | 💧 Humidity | 🌅 Sunrise | 🌇 Sunset |

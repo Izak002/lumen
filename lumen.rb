@@ -8,18 +8,18 @@ require "git"
 #  -------------------------------------------------------------------------
 
 # Repository details
-# REPO_URL = "git@github.com:Izak002/Izak002.git"
-# CLONE_DIR = "cloned_repo"
+REPO_URL = "git@github.com:Izak002/Izak002.git"
+CLONE_DIR = "cloned_repo"
 
 # get personal repo
-# if Dir.exist?(CLONE_DIR)
-#     puts "Repository already cloned. Pulling latest changes..."
-#     repo = Git.open(CLONE_DIR)
-#     repo.pull
-# else
-#     puts "Cloning repository..."
-#     repo = Git.clone(REPO_URL, CLONE_DIR)
-# end
+if Dir.exist?(CLONE_DIR)
+    puts "Repository already cloned. Pulling latest changes..."
+    repo = Git.open(CLONE_DIR)
+    repo.pull
+else
+    puts "Cloning repository..."
+    repo = Git.clone(REPO_URL, CLONE_DIR)
+end
 
 # logger = Scriptorium.new
 
@@ -28,15 +28,13 @@ weather = Weather.new()
 weather.fetch("Cape Town")
 weather.update_readme
 
-# weather.display
 
 # logger.info("Gettig github stats information....")
 github_stats = GithubStats.new
 github_stats.update_readme
-# github_stats.display_stats
 
 # Commit and push changes
-# repo.add("README.md")
-# repo.commit("Lumen was here 🌕")
-# repo.push
+repo.add("README.md")
+repo.commit("Lumen magic 🌙")
+repo.push
 
