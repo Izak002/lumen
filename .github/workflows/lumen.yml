@@ -33,8 +33,8 @@ jobs:
           
       - name: Run Lumen using run script
         env:
-          GITHUB_TOKEN: ${{ secrets.STATS }}
-          WEATHER_TOKEN: ${{ secrets.WEATHER_API }}
+          GITHUB_API: ${{ secrets.STATS }}
+          WEATHER_API_KEY: ${{ secrets.WEATHER_API }}
         run: |
           # First make sure known_hosts has the GitHub key to avoid the prompt
           mkdir -p ~/.ssh
