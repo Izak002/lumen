@@ -35,6 +35,7 @@ jobs:
         env:
           GITHUB_API: ${{ secrets.STATS }}
           WEATHER_API_KEY: ${{ secrets.WEATHER_API }}
+          TZ: 'Africa/Johannesburg'
         run: |
           # First make sure known_hosts has the GitHub key to avoid the prompt
           mkdir -p ~/.ssh
